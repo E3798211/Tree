@@ -2,6 +2,7 @@
 
 #include "Tree.h"
 
+#include "DebugLib.h"
 
 int main()
 {
@@ -12,7 +13,12 @@ int main()
 
     Node* new_node;
     PrintVar(new_node);
-    b.Addleft (b.root, &new_node);
-    b.Addleft (b.root, &new_node);
-    b.Addright(b.root, &new_node);
+    b.AddLeft (b.root, &new_node);
+    b.AddLeft (b.root, &new_node);
+    b.AddRight(b.root, &new_node);
+    b.AddRight(b.root, &new_node);
+
+    b.SetData(b.root->Left, "qwe");
+    std::cout << b.root->Left->Data;
+
 }

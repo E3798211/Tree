@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <iomanip>
 
 // =================================================
 // Debug mode
@@ -25,27 +26,38 @@ const char DEFAULT[] = "\x1b[0m";
 
 // =================================================
 
+extern bool IN;
+
 void SetColor(const char* color);
 
 #define EnterFunction()                                                         \
     do{                                                                         \
-        DEBUG SetColor(YELLOW);                                                 \
-        DEBUG std::cout << "Entered " << __func__ << "():\n" << std::endl;      \
-        DEBUG SetColor(DEFAULT);                                                \
-    }while(0)
+    DEBUG {                                                                     \
+        SetColor(YELLOW);                                                       \
+        std::cout << "\nEntered " << __func__ << "():\n" << std::endl;          \
+        SetColor(DEFAULT);                                                      \
+        IN = true;                                                              \
+    }                                                                           \
+    }while(0)                                                                                                                                              \
 
 #define QuitFunction()                                                          \
     do{                                                                         \
-        DEBUG SetColor(YELLOW);                                                 \
-        DEBUG std::cout << "\nQuited " << __func__ << "():" << std::endl;       \
-        DEBUG SetColor(DEFAULT);                                                \
+    DEBUG {                                                                     \
+        SetColor(YELLOW);                                                       \
+        std::cout << "\nQuited " << __func__ << "():" << std::endl;             \
+        SetColor(DEFAULT);                                                      \
+        IN = false;                                                             \
+    }                                                                           \
     }while(0)
 
 #define PrintVar( var )                                                         \
     do{                                                                         \
-        DEBUG SetColor(CYAN);                                                   \
-        DEBUG std::cout << #var    << "\t=\t" << var << std::endl;                \
-        DEBUG SetColor(DEFAULT);                                                \
+    DEBUG{                                                                      \
+        SetColor(CYAN);                                                         \
+        if(IN)    std::cout << ">> ";                                          \
+        std::cout << std::setw(25) << #var << " = " << var << std::endl;        \
+        SetColor(DEFAULT);                                                      \
+    }                                                                           \
     }while(0)
 
 // =================================================

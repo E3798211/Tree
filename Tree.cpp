@@ -12,10 +12,15 @@ int Tree::Add##side (Node* app_node, Node** new_node)       \
 {                                                           \
     EnterFunction();                                        \
                                                             \
+    PrintVar(app_node);                                     \
+    PrintVar(*new_node);                                    \
+    PrintVar(n_nodes);                                      \
+                                                            \
     assert(app_node != nullptr);                            \
     assert(new_node != nullptr);                            \
                                                             \
-    if(NodeExists(app_node-> side )){                       \
+    SAFE {                                                  \
+    if(NodeExists(root, app_node-> side )){                 \
         SetColor(BLUE);                                     \
         USR_INFORM printf("Node already exist\n");          \
         SetColor(DEFAULT);                                  \
@@ -29,6 +34,10 @@ int Tree::Add##side (Node* app_node, Node** new_node)       \
         QuitFunction();                                     \
         return NODE_ALREADY_EXIST;                          \
     }                                                       \
+    }                                                       \
+                                                            \
+                                                            \
+                                                            \
                                                             \
     try                                                     \
     {                                                       \
@@ -51,15 +60,21 @@ int Tree::Add##side (Node* app_node, Node** new_node)       \
         return NODE_NOT_CREATED;                            \
     }                                                       \
                                                             \
-    app_node-> side ->parent = app_node;                    \
+    app_node-> side ->Parent = app_node;                    \
     *new_node = app_node-> side;                            \
+                                                            \
+                                                            \
+                                                            \
+                                                            \
                                                             \
     PrintVar(app_node);                                     \
     PrintVar(*new_node);                                    \
     PrintVar(n_nodes);                                      \
                                                             \
     SetColor(GREEN);                                        \
-    DEBUG printf("New side node created\n");                \
+    DEBUG printf("New ");                                   \
+    DEBUG printf(#side);                                    \
+    DEBUG printf(" node created\n");                        \
     SetColor(DEFAULT);                                      \
                                                             \
     QuitFunction();                                         \
@@ -70,11 +85,18 @@ int Tree::Add##side (Node* app_node, Node** new_node)       \
 
 // =================================================    Private
 
-bool Tree::NodeExists(Node* check_ptr)
+bool Tree::NodeExists(Node* branch_root, Node* check_ptr)
 {
-    return (check_ptr == nullptr)?  false : true;
+    if(check_ptr == nullptr)                return false;
+
+    if(branch_root == nullptr)              return false;
+    if(branch_root == check_ptr)            return true;
+
+    return (NodeExists(branch_root->Left,  check_ptr) ||
+            NodeExists(branch_root->Right, check_ptr))?    true : false;
 }
 // =================================================    Public
+
 
 Tree::Tree()
 {
@@ -98,6 +120,72 @@ Tree::Tree()
     QuitFunction();
 }
 
-/*AUTO GENERATED*/    AddNode(left);
+/*AUTO GENERATED*/    AddNode(Left);
 
-/*AUTO GENERATED*/    AddNode(right);
+/*AUTO GENERATED*/    AddNode(Right);
+
+int Tree::SetData(Node* change_node, data_t data)
+{
+    EnterFunction();
+
+    PrintVar(change_node);
+    PrintVar(data);
+
+    assert(change_node != nullptr);
+    assert(data != nullptr);
+
+    SAFE {
+
+    // Verificator
+
+    if(!NodeExists(root, change_node)){
+        SetColor(BLUE);
+        USR_INFORM printf("Node does not exist\n");
+        SetColor(DEFAULT);
+
+        PrintVar(change_node);
+        PrintVar(data);
+
+        QuitFunction();
+        return NODE_ALREADY_EXIST;
+    }
+    }
+
+    // =============================
+
+    size_t data_len = strlen(data);
+    PrintVar(data_len);
+
+    data_t tmp = change_node->Data;
+    try
+    {
+        change_node->Data = new char [data_len + 1];
+    }
+    catch(const std::bad_alloc &ex)
+    {
+        SetColor(RED);
+        printf("=====   Cannot allocate %d bytes for Data   =====\n", data_len + 1);
+        SetColor(DEFAULT);
+
+        PrintVar(change_node);
+        PrintVar(data);
+
+        QuitFunction();
+        return DATA_NOT_CREATED;
+    }
+
+    delete [] tmp;
+    strcpy(change_node->Data, data);
+
+    // =============================
+
+    PrintVar(change_node);
+    PrintVar(change_node->Data);
+    PrintVar(data);
+
+    QuitFunction();
+    return OK;
+}
+
+
+

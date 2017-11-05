@@ -3,9 +3,25 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <cstring>
 #include "Errors.h"
 
 // =================================================
+
+// =========================    Safe mode.
+//
+//  In safe mode programm checks if node exists, runs verificator, etc.
+//  In case you are sure that your programm will work correct and you need to
+//  speed it up, turn safe-mode off.
+//
+
+// Comment next line to turn safe-mode off.
+#define _SAFE
+#ifdef _SAFE
+    #define SAFE
+#else
+    #define SAFE if(0)
+#endif // _USR_INFORM
 
 // =========================    Print information for user
 #define _USR_INFORM
@@ -16,23 +32,26 @@
 #endif // _USR_INFORM
 
 // =========================    Print information debug information
+// Comment next line to turn debug off.
 #define _DEBUG
 #include "DebugLib.h"
 
 // =================================================
 
+typedef char* data_t;
+
 struct Node {
     /// String with data
-    char* data  = nullptr;
+    data_t  Data = nullptr;
 
     /// Pointer to the left node
-    Node* left  = nullptr;
+    Node*   Left = nullptr;
 
     /// Pointer to the right node
-    Node* right = nullptr;
+    Node*  Right = nullptr;
 
     /// Pointer to the parent node
-    Node* parent = nullptr;
+    Node* Parent = nullptr;
 };
 
 class Tree {
@@ -49,9 +68,10 @@ public:
     /**
         Retutns TRUE if node exists
 
-        \param [in] node    Pointer we want to check
+        \param [in] branch_root Pointer to te first element in branch we check
+        \param [in] node        Pointer we want to check
     */
-    bool NodeExists(Node* check_ptr);
+    bool NodeExists(Node* branch_root, Node* check_ptr);                           // FIX
 
 public:
     /// Default constructor
@@ -64,7 +84,7 @@ public:
         \param [in]  to_node    Ponter to the node you want append to
         \param [out] new_ptr    Pointer to save pointer to the new node
     */
-    int Addleft(Node* app_node, Node** new_ptr);
+    int AddLeft(Node* app_node, Node** new_ptr);
 
     /// Add node to the right
     /**
@@ -73,7 +93,16 @@ public:
         \param [in]  to_node    Ponter to the node you want append to
         \param [out] new_ptr    Pointer to save pointer to the new node
     */
-    int Addright(Node* app_node, Node** new_ptr);
+    int AddRight(Node* app_node, Node** new_ptr);
+
+    /// Set data
+    /**
+        Returns error code
+
+        \param [in]  change_node    Ponter to the node you want to change
+        \param [out] data           New data
+    */
+    int SetData(Node* change_node, data_t data);
 
     // SetData()
     // GetRoot()
