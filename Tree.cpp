@@ -63,6 +63,26 @@ int Tree::Add##side (Node* app_node, Node** new_node)       \
     app_node-> side ->Parent = app_node;                    \
     *new_node = app_node-> side;                            \
                                                             \
+    if      (!strcmp(#side, "Right"))                       \
+        app_node->side->Is_right = true;                    \
+    else if (!strcmp(#side, "Left"))                        \
+        app_node->side->Is_right = false;                   \
+    else{                                                   \
+        SetColor(RED);                                      \
+        DEBUG printf("=====   Invalid argument. Expected \"Left\" or \"Right\"   =====\n");   \
+        SetColor(DEFAULT);                                  \
+                                                            \
+        *new_node = nullptr;                                \
+                                                            \
+        PrintVar( app_node);                                \
+        PrintVar(*new_node);                                \
+        PrintVar( n_nodes);                                 \
+                                                            \
+        QuitFunction();                                     \
+        return INVALID_ARGUMENT;                            \
+    }                                                       \
+                                                            \
+                                                            \
                                                             \
                                                             \
                                                             \
@@ -85,7 +105,7 @@ int Tree::Add##side (Node* app_node, Node** new_node)       \
 
 // =================================================    Private
 
-bool Tree::NodeExists(Node* branch_root, Node* check_ptr)
+bool Tree::NodeExists(const Node* branch_root, const Node* check_ptr)
 {
     if(check_ptr == nullptr)                return false;
 
@@ -113,6 +133,8 @@ Tree::Tree()
         DEBUG printf("=====   Cannot create root node   =====\n");
         SetColor(DEFAULT);
     }
+
+    root->Is_right = true;
 
     PrintVar(root);
     PrintVar(n_nodes);
@@ -152,7 +174,7 @@ int Tree::SetData(Node* change_node, data_t data)
         PrintVar(data);
 
         QuitFunction();
-        return NODE_ALREADY_EXIST;
+        return NODE_DOES_NOT_EXIST;
     }
     }
 
@@ -192,5 +214,48 @@ int Tree::SetData(Node* change_node, data_t data)
     return OK;
 }
 
+int Tree::DeleteBranch(Node* branch_root, int rec_depth, bool right)
+{
+    assert(branch_root != nullptr);
 
+    SetColor(MAGENTA);
+    DEBUG printf("\tIn:   recursion depth = %d, right = %s\n", rec_depth, right? "true" : "false");
+    SetColor(DEFAULT);
 
+    PrintVar(branch_root);
+    PrintVar(branch_root->Left);
+    PrintVar(branch_root->Right);
+
+    if(!NodeExists(root, branch_root)){
+        SetColor(BLUE);
+        USR_INFORM printf("Node does not exist\n");
+        SetColor(DEFAULT);
+
+        return NODE_DOES_NOT_EXIST;
+    }
+
+    if((branch_root)->Left != nullptr)
+        DeleteBranch(branch_root->Left,    rec_depth + 1, false);
+    if((branch_root)->Right != nullptr)
+        DeleteBranch((branch_root)->Right, rec_depth + 1, true);
+
+    delete [] (branch_root)->Data;
+
+    if(branch_root != root){
+        if(branch_root->Is_right)
+            branch_root->Parent->Right = nullptr;
+        else
+            branch_root->Parent->Left  = nullptr;
+    }
+    else{
+        root = nullptr;
+    }
+
+    delete branch_root;
+    n_nodes--;
+
+    SetColor(MAGENTA);
+    DEBUG printf("\tQuit: recursion depth = %d, right = %s\n", rec_depth, right? "true" : "false");
+    SetColor(DEFAULT);
+    return OK;
+}

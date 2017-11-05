@@ -21,6 +21,8 @@ const char    BLUE[] = "\x1b[34m";
 const char     RED[] = "\x1b[91m";
 const char   GREEN[] = "\x1b[92m";
 const char  YELLOW[] = "\x1b[93m";
+const char MAGENTA[] = "\x1b[95m";
+
 const char    CYAN[] = "\x1b[96m";
 const char DEFAULT[] = "\x1b[0m";
 
@@ -54,7 +56,7 @@ void SetColor(const char* color);
     do{                                                                         \
     DEBUG{                                                                      \
         SetColor(CYAN);                                                         \
-        if(IN)    std::cout << ">> ";                                          \
+        if(IN)    std::cout << ">>\t";                                          \
         std::cout << std::setw(25) << #var << " = " << var << std::endl;        \
         SetColor(DEFAULT);                                                      \
     }                                                                           \

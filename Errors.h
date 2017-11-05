@@ -2,8 +2,9 @@
 #define ERRORS_H_INCLUDED
 
 enum ErrorCodes {
-    DATA_NOT_CREATED    = -4,
+    DATA_NOT_CREATED    = -5,
 
+    NODE_DOES_NOT_EXIST = -4,
     NODE_ALREADY_EXIST  = -3,
     NODE_NOT_CREATED    = -2,
 

@@ -42,16 +42,19 @@ typedef char* data_t;
 
 struct Node {
     /// String with data
-    data_t  Data = nullptr;
+    data_t   Data = nullptr;
 
     /// Pointer to the left node
-    Node*   Left = nullptr;
+    Node*    Left = nullptr;
 
     /// Pointer to the right node
-    Node*  Right = nullptr;
+    Node*   Right = nullptr;
 
     /// Pointer to the parent node
-    Node* Parent = nullptr;
+    Node*  Parent = nullptr;
+
+    /// Status if node is on the right of the parent or not
+    bool Is_right = false;
 };
 
 class Tree {
@@ -59,6 +62,9 @@ class Tree {
 public:
     /// Pointer to the first node
     Node* root  = nullptr;
+
+    Node* Right = nullptr;
+    Node* Left = nullptr;
 
     /// Nodes counter
     int n_nodes = 0;
@@ -68,10 +74,10 @@ public:
     /**
         Retutns TRUE if node exists
 
-        \param [in] branch_root Pointer to te first element in branch we check
-        \param [in] node        Pointer we want to check
+        \param [in] branch_root     Pointer to te first element in branch we check
+        \param [in] node            Pointer we want to check
     */
-    bool NodeExists(Node* branch_root, Node* check_ptr);
+    bool NodeExists(const Node* branch_root, const Node* check_ptr);
 
 public:
     /// Default constructor
@@ -84,8 +90,8 @@ public:
     /**
         Returns error code
 
-        \param [in]  to_node    Ponter to the node you want append to
-        \param [out] new_ptr    Pointer to save pointer to the new node
+        \param [in]  to_node        Ponter to the node you want append to
+        \param [out] new_ptr        Pointer to save pointer to the new node
     */
     int AddLeft(Node* app_node, Node** new_ptr);
 
@@ -93,8 +99,8 @@ public:
     /**
         Returns error code
 
-        \param [in]  to_node    Ponter to the node you want append to
-        \param [out] new_ptr    Pointer to save pointer to the new node
+        \param [in]  to_node        Ponter to the node you want append to
+        \param [out] new_ptr        Pointer to save pointer to the new node
     */
     int AddRight(Node* app_node, Node** new_ptr);
 
@@ -105,14 +111,17 @@ public:
         \param [in]  change_node    Ponter to the node you want to change
         \param [out] data           New data
     */
-    int SetData(Node* change_node, data_t data);
+    int SetData(Node* change_node, const data_t data);
 
+    /// Delete branch
+    /**
+        \param [in] branch_root     Pointer to the root node of the branch we want to delete
+        \param [in] dbg_rec_depth   DEBUG VARRIABLE, PLEASE DO NOT USE IT
+        \param [in] dbg_right       DEBUG VARRIABLE, PLEASE DO NOT USE IT
 
-
-    // Getleft(Node* app_node)              |   DEFINE  \
-    // Getright(Node* app_node)             |   DEFINE   >  common define
-    // Getparent(Node* app_node)            |   DEFINE  /
-    // Delete() --- recursively
+        \warning Deletes branch RECURSIVELY! Use only first parameter or you will not see correct debug info
+    */
+    int DeleteBranch(Node* branch_root, int dbg_rec_depth = 0, bool dbg_right = true);
 
     // Verificator
     // Dump()
