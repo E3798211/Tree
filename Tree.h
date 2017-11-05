@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <cstring>
 #include "Errors.h"
+#include "DotSyntax.h"
 
 // =================================================
 
@@ -37,7 +38,6 @@
 #include "DebugLib.h"
 
 // =================================================
-
 typedef char* data_t;
 
 struct Node {
@@ -78,6 +78,15 @@ public:
         \param [in] node            Pointer we want to check
     */
     bool NodeExists(const Node* branch_root, const Node* check_ptr);
+
+    /// Prints node for DOT
+    /**
+        \param [in] output          FILE to write in
+        \param [in] branch_root     Pointer to the root of the branch
+    */
+    //int PrintNode(FILE* output, Node* branch_root);
+
+    int PrintBranch(FILE* output, Node* branch_root, int (*print_type)(FILE* output, Node* node_to_print));
 
 public:
     /// Default constructor
@@ -122,6 +131,10 @@ public:
         \warning Deletes branch RECURSIVELY! Use only first parameter or you will not see correct debug info
     */
     int DeleteBranch(Node* branch_root, int dbg_rec_depth = 0, bool dbg_right = true);
+
+    /// Calls grapic dump
+    int CallGraph();
+
 
     // Verificator
     // Dump()

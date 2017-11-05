@@ -2,6 +2,8 @@
 #define ERRORS_H_INCLUDED
 
 enum ErrorCodes {
+    FILE_NOT_OPENED     = -6,
+
     DATA_NOT_CREATED    = -5,
 
     NODE_DOES_NOT_EXIST = -4,

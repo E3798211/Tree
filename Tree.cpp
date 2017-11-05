@@ -1,5 +1,62 @@
 #include "Tree.h"
 
+// =================================================    Supporting functions
+
+int SetNodes(FILE* output, Node* branch_root)
+{
+    //PrintVar(branch_root);
+    if(branch_root == nullptr)      return OK;
+
+    if(output == nullptr){
+        SetColor(RED);
+        DEBUG printf("=====   Output file for DOT was not opened.   =====\n");
+        SetColor(DEFAULT);
+
+        return FILE_NOT_OPENED;
+    }
+
+    fprintf(output, "%d", branch_root);
+
+    fprintf(output, BEGIN_DECLARATION);
+    fprintf(output, LABELS);
+    fprintf(output, NEXT_FIELD);
+
+    fprintf(output, BEGIN_COLUMN);
+
+    fprintf(output, "%d", branch_root);
+    fprintf(output, NEXT_FIELD);
+    fprintf(output, "%s", (branch_root->Data != nullptr)?   branch_root->Data : "none");
+    fprintf(output, NEXT_FIELD);
+    fprintf(output, "%d", branch_root->Left);
+    fprintf(output, NEXT_FIELD);
+    fprintf(output, "%d", branch_root->Right);
+    fprintf(output, END_COLUMN);
+
+    fprintf(output, END_DECLARATION);
+
+    return OK;
+}
+
+int BuildConnections(FILE* output, Node* branch_root)
+{
+    if(branch_root == nullptr)      return OK;
+
+    if(branch_root->Left != nullptr){
+        fprintf(output, "%d", branch_root);
+        fprintf(output, TO);
+        fprintf(output, "%d", branch_root->Left);
+        fprintf(output, FORWARD_DIRECTION);
+    }
+    if(branch_root->Right != nullptr){
+        fprintf(output, "%d", branch_root);
+        fprintf(output, TO);
+        fprintf(output, "%d", branch_root->Right);
+        fprintf(output, FORWARD_DIRECTION);
+    }
+
+    return OK;
+}
+
 
 // =================================================    Say "No!" to copy-paste!
 //
@@ -115,6 +172,19 @@ bool Tree::NodeExists(const Node* branch_root, const Node* check_ptr)
     return (NodeExists(branch_root->Left,  check_ptr) ||
             NodeExists(branch_root->Right, check_ptr))?    true : false;
 }
+
+int Tree::PrintBranch(FILE* output, Node* branch_root, int (*print_type)(FILE* output, Node* node_to_print))
+{
+    print_type(output, branch_root);
+
+    if(branch_root->Left != nullptr)
+        PrintBranch(output, branch_root->Left, print_type);
+    if(branch_root->Right != nullptr)
+        PrintBranch(output, branch_root->Right, print_type);
+
+    return OK;
+}
+
 // =================================================    Public
 
 
@@ -226,12 +296,14 @@ int Tree::DeleteBranch(Node* branch_root, int rec_depth, bool right)
     PrintVar(branch_root->Left);
     PrintVar(branch_root->Right);
 
+    SAFE {
     if(!NodeExists(root, branch_root)){
         SetColor(BLUE);
         USR_INFORM printf("Node does not exist\n");
         SetColor(DEFAULT);
 
         return NODE_DOES_NOT_EXIST;
+    }
     }
 
     if((branch_root)->Left != nullptr)
@@ -258,4 +330,39 @@ int Tree::DeleteBranch(Node* branch_root, int rec_depth, bool right)
     DEBUG printf("\tQuit: recursion depth = %d, right = %s\n", rec_depth, right? "true" : "false");
     SetColor(DEFAULT);
     return OK;
+}
+
+
+
+int Tree::CallGraph()
+{
+    FILE* output = fopen(DOT_FILENAME_DEFAULT, "w");
+    if(output == nullptr){
+        SetColor(RED);
+        DEBUG printf("=====   Output file for DOT was not opened.   =====\n");
+        SetColor(DEFAULT);
+
+        return FILE_NOT_OPENED;
+    }
+
+    fprintf(output, BEGIN);
+    fprintf(output, SET_RECORD_SHAPE);
+    PrintBranch(output, root, SetNodes);
+    PrintBranch(output, root, BuildConnections);
+    fprintf(output, END);
+
+    fclose(output);
+
+    char command[1000];
+    strcpy(command, DOT1);
+    strcat(command, DOT_FILENAME_DEFAULT);
+    strcat(command, DOT2);
+    strcat(command, IMG_FILENAME_DEFAULT);
+
+    system(command);
+
+    strcpy(command, OPEN);
+    strcat(command, IMG_FILENAME_DEFAULT);
+
+    return system(command);
 }

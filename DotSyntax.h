@@ -1,6 +1,9 @@
 #ifndef DOTSYNTAX_H_INCLUDED
 #define DOTSYNTAX_H_INCLUDED
 
+const char DOT_FILENAME_DEFAULT[] = "dotdef.dot";
+const char IMG_FILENAME_DEFAULT[] = "dotdef.ps";
+
 const char OPEN[] = "xdg-open ";
 
 const char DOT1[] = "dot -Tps ";
@@ -17,7 +20,7 @@ const char   END_DECLARATION[]  = "\"];\n";
 const char      BEGIN_COLUMN[]  = "{ ";
 const char        END_COLUMN[]  = " }";
 const char        NEXT_FIELD[]  = " | ";
-const char            LABELS[]  = "{Place in array | Data | Next | Prev } ";
+const char            LABELS[]  = "{Pointer | Data | Left | Right } ";
 
 
 const char FORWARD_DIRECTION[]  = " [color = green];\n";

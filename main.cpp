@@ -17,15 +17,14 @@ int main()
     b.AddLeft (new_node, &tmp);
 
     b.SetData(b.root, "datataatat");
+    b.AddRight(b.GetRoot()->Left, &tmp);
+    b.AddRight(b.GetRoot()->Left->Right, &tmp);
+    b.AddLeft(b.GetRoot()->Left->Right, &tmp);
 
-    PrintVar(b.GetRoot());
     //b.DeleteBranch(nullptr);
     new_node = b.GetRoot();
-    b.DeleteBranch(new_node);
+    //b.DeleteBranch(new_node);
 
-    PrintVar(new_node);
-    PrintVar(b.n_nodes);
-    PrintVar(b.GetRoot());
-    //PrintVar(b.GetRoot());
+    b.CallGraph();
 
 }
