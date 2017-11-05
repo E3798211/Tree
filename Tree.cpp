@@ -120,6 +120,11 @@ Tree::Tree()
     QuitFunction();
 }
 
+Node* Tree::GetRoot()
+{
+    return root;
+}
+
 /*AUTO GENERATED*/    AddNode(Left);
 
 /*AUTO GENERATED*/    AddNode(Right);

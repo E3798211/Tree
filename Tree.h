@@ -71,11 +71,14 @@ public:
         \param [in] branch_root Pointer to te first element in branch we check
         \param [in] node        Pointer we want to check
     */
-    bool NodeExists(Node* branch_root, Node* check_ptr);                           // FIX
+    bool NodeExists(Node* branch_root, Node* check_ptr);
 
 public:
     /// Default constructor
     Tree();
+
+    /// Gets root
+    Node* GetRoot();
 
     /// Add node to the left
     /**
@@ -104,8 +107,8 @@ public:
     */
     int SetData(Node* change_node, data_t data);
 
-    // SetData()
-    // GetRoot()
+
+
     // Getleft(Node* app_node)              |   DEFINE  \
     // Getright(Node* app_node)             |   DEFINE   >  common define
     // Getparent(Node* app_node)            |   DEFINE  /

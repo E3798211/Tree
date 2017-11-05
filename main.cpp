@@ -13,7 +13,7 @@ int main()
 
     Node* new_node;
     PrintVar(new_node);
-    b.AddLeft (b.root, &new_node);
+    b.AddLeft (b.GetRoot(), &new_node);
     b.AddLeft (b.root, &new_node);
     b.AddRight(b.root, &new_node);
     b.AddRight(b.root, &new_node);
