@@ -1,11 +1,13 @@
 #include <stdio.h>
 
-#include "Tree.h"
+//#include "Tree.h"
+#include "Akinator.h"
 
 #include "DebugLib.h"
 
 int main()
 {
+/*
     Tree b;
 
     Node* new_node;
@@ -16,7 +18,7 @@ int main()
     b.AddRight(b.GetRoot(), &new_node);
     b.AddLeft (new_node, &tmp);
 
-    b.SetData(b.root, "datataatat");
+    b.SetData(b.GetRoot(), "datataatat");
     b.AddRight(b.GetRoot()->Left, &tmp);
     b.AddRight(b.GetRoot()->Left->Right, &tmp);
     b.AddLeft(b.GetRoot()->Left->Right, &tmp);
@@ -25,8 +27,16 @@ int main()
     new_node = b.GetRoot();
     //b.DeleteBranch(new_node);
 
-    //b.CallGraph();
+    b.CallGraph();
 
-    b.DeleteBranch(b.GetRoot());
+    //b.DeleteBranch(b.GetRoot());
+*/
+
+    Akinator a;
+    //a.LoadData("save.txt");
+    a.LoadData("save.txt");
+
+    a.tree.CallGraph();
+
 
 }

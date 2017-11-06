@@ -65,4 +65,24 @@ void SetColor(const char* color);
 // =================================================
 
 
+
+
+/*
+
+
+    Add Execute( param ): prints debug info and places param in source text
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
 #endif // DEBUGLIB_H_INCLUDED

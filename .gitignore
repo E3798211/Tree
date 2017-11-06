@@ -5,3 +5,6 @@
 *.cbp
 *.ps
 *.dot
+
+save.txt
+datadef.txt

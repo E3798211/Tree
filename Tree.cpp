@@ -212,9 +212,30 @@ Tree::Tree()
     QuitFunction();
 }
 
+Tree::~Tree()
+{
+    EnterFunction();
+    if(alive){
+        alive = false;
+
+        DeleteBranch(root);
+    }
+    QuitFunction();
+}
+
 Node* Tree::GetRoot()
 {
     return root;
+}
+
+int Tree::GetNNodes()
+{
+    return n_nodes;
+}
+
+bool Tree::IsAlive()
+{
+    return alive;
 }
 
 /*AUTO GENERATED*/    AddNode(Left);

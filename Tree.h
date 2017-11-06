@@ -58,16 +58,15 @@ struct Node {
 };
 
 class Tree {
-//private:
-public:
+private:
     /// Pointer to the first node
     Node* root  = nullptr;
 
-    Node* Right = nullptr;
-    Node* Left = nullptr;
-
     /// Nodes counter
     int n_nodes = 0;
+
+    /// Alive or deleted
+    bool alive = true;
 
 // =========================    Supporting functions
     /// Checks node existence
@@ -93,8 +92,17 @@ public:
     /// Default constructor
     Tree();
 
+    /// Destructor
+    ~Tree();
+
     /// Gets root
     Node* GetRoot();
+
+    /// Gets n_nodes
+    int GetNNodes();
+
+    /// Gets status - dead or alive
+    bool IsAlive();
 
     /// Add node to the left
     /**
@@ -139,7 +147,6 @@ public:
 
     // Verificator
     // Dump()
-    // DOT
 
 };
 
