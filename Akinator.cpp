@@ -81,11 +81,6 @@ int Akinator::AppendNode(char* data, int* place_in_data, Node* app_node)
         return NODE_NOT_CREATED;
     }
 
-    SetColor(MAGENTA);
-    printf("Creating node_data\n");
-    PrintVar(*place_in_data);
-    PrintVar(node_data_end);
-
     int i = 0;
     while((*place_in_data) != node_data_end)
         node_text[i++] = data[(*place_in_data)++];

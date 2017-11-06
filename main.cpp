@@ -38,5 +38,16 @@ int main()
 
     a.tree.CallGraph();
 
+    int b = 7;
+    PrintVar(b);
+
+    EnterFunction();
+    //Execute(int a = 0;);
+    QuitFunction();
+
+    Execute(int c = 0);
+
+    //PrintVar(a);
+
 
 }

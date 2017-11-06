@@ -23,8 +23,8 @@ const char        NEXT_FIELD[]  = " | ";
 const char            LABELS[]  = "{Pointer | Data | Left | Right } ";
 
 
-const char FORWARD_DIRECTION[]  = " [color = green];\n";
-const char    BACK_DIRECTION[]  = " [color = blue];\n";
+const char   RIGHT_DIRECTION[]  = " [color = green];\n";
+const char    LEFT_DIRECTION[]  = " [color = blue];\n";
 const char   WRONG_DIRECTION[]  = " [color = red];\n";
 
 const char                TO[]  = " -> ";

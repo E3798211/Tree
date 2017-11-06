@@ -38,7 +38,7 @@ public:
     */
     int LoadData(const char* filename);
 
-
+    // Unloading data
     // AskForDiff()
 
 public:

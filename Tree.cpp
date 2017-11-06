@@ -45,13 +45,14 @@ int BuildConnections(FILE* output, Node* branch_root)
         fprintf(output, "%d", branch_root);
         fprintf(output, TO);
         fprintf(output, "%d", branch_root->Left);
-        fprintf(output, FORWARD_DIRECTION);
+        fprintf(output, LEFT_DIRECTION);
+
     }
     if(branch_root->Right != nullptr){
         fprintf(output, "%d", branch_root);
         fprintf(output, TO);
         fprintf(output, "%d", branch_root->Right);
-        fprintf(output, FORWARD_DIRECTION);
+        fprintf(output, RIGHT_DIRECTION);
     }
 
     return OK;
