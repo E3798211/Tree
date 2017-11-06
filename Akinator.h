@@ -63,6 +63,15 @@ public:
     */
     int UnloadData(const char* filename);
 
+// =========================    Supporting functions about action
+    /// Asks user
+    /**
+        Returns true if answer is positive, false otherwise
+
+        \param [in] question        String with the question
+    */
+    bool UserAnswer(const char* question);
+
     // AskForDiff()
     // AddNode()
 
@@ -71,12 +80,16 @@ public:
     /**
         Put nullptr as argument to load default database
 
-        \param [in] filename        Name of the database.
+        \param [in] filename        Name of the database
     */
     Akinator(const char* filename = nullptr);
 
     /// Default destructor
     ~Akinator();
+
+
+    // ACT() or GO() or START() etc
+
 
     // AddElem()
     // Compare

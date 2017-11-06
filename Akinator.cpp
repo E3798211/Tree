@@ -164,6 +164,8 @@ int Akinator::PrintBranch(FILE* output, Node* root_node, int recursion_depth)
     fprintf(output, "%s", root_node->Data);
     fprintf(output, "\"\n");
 
+    PrintVar(root_node->Data);
+
     if(root_node->Left != nullptr)
         PrintBranch(output, root_node->Left, recursion_depth + 1);
     if(root_node->Right != nullptr)
@@ -199,6 +201,44 @@ int Akinator::UnloadData(const char* filename)
     QuitFunction();
     return OK;
 }
+
+bool Akinator::UserAnswer(const char* question)
+{
+    EnterFunction();
+
+    assert(question != nullptr);
+
+    printf("%s?\nYour answer: ", question);
+
+    char ans[100] = "";
+
+    bool choise = false;
+    while(1){
+        while(!scanf("%s", &ans)){
+            printf("I do not understand you...\nPlease, say YES or NO: ");
+            getchar();
+        }
+
+        if      (!strcmp(ans, "YES") || !strcmp(ans, "Y")){
+            choise = true;
+            break;
+        }else if(!strcmp(ans, "NO")  || !strcmp(ans, "N")){
+            choise = false;
+            break;
+        }
+
+        printf("I do not understand you...\nPlease, say YES or NO: ");
+    }
+
+    PrintVar(ans);
+    PrintVar(choise);
+    QuitFunction();
+
+    return choise;
+}
+
+
+
 
 Akinator::Akinator(const char* filename)
 {

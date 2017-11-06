@@ -37,9 +37,11 @@ int main()
     //a.LoadData("save.txt");
     //a.LoadData("save.txt");
 
-    a.tree.CallGraph();
+    //a.tree.CallGraph();
 
-    a.UnloadData(DEFAULT_OUTPUT);
+    //a.UnloadData(DEFAULT_OUTPUT);
+
+    PrintVar(a.UserAnswer("qwe"));
 
     int b = 7;
     PrintVar(b);
