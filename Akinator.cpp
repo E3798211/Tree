@@ -1,5 +1,14 @@
 #include "Akinator.h"
 
+int Akinator::Align(FILE* output, int depth)
+{
+    assert(output != nullptr);
+    for(int i = 0; i < depth; i++)
+        fprintf(output, "\t");
+
+    return depth;
+}
+
 char* Akinator::FileRead(FILE* input)
 {
     EnterFunction();
@@ -143,9 +152,60 @@ int Akinator::LoadData(const char* filename)
     return OK;
 }
 
-Akinator::Akinator()
+int Akinator::PrintBranch(FILE* output, Node* root_node, int recursion_depth)
 {
     EnterFunction();
+
+    assert(output != nullptr);
+    assert(root_node != nullptr);
+
+    Align(output, recursion_depth);
+    fprintf(output, "(\"");
+    fprintf(output, "%s", root_node->Data);
+    fprintf(output, "\"\n");
+
+    if(root_node->Left != nullptr)
+        PrintBranch(output, root_node->Left, recursion_depth + 1);
+    if(root_node->Right != nullptr)
+        PrintBranch(output, root_node->Right, recursion_depth + 1);
+
+    Align(output, recursion_depth);
+    fprintf(output, ")\n");
+
+    QuitFunction();
+
+    return OK;
+}
+
+int Akinator::UnloadData(const char* filename)
+{
+    EnterFunction();
+
+    assert(filename != nullptr);
+
+    FILE* output = fopen(filename, "w");
+    if(output == nullptr){
+        SetColor(RED);
+        DEBUG printf("=====   Cannot open file %s   =====\n", filename);
+        SetColor(DEFAULT);
+
+        return FILE_NOT_OPENED;
+    }
+
+    PrintBranch(output, tree.GetRoot());
+
+    fclose(output);
+
+    QuitFunction();
+    return OK;
+}
+
+Akinator::Akinator(const char* filname)
+{
+    EnterFunction();
+
+    (filname != nullptr)?   LoadData(filname) : LoadData(DEFAULT_INPUT);
+
     QuitFunction();
 }
 

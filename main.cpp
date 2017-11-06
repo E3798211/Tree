@@ -32,11 +32,14 @@ int main()
     //b.DeleteBranch(b.GetRoot());
 */
 
-    Akinator a;
+    Akinator a("save.txt");
+    //Akinator a("outdef.txt");
     //a.LoadData("save.txt");
-    a.LoadData("save.txt");
+    //a.LoadData("save.txt");
 
     a.tree.CallGraph();
+
+    a.UnloadData(DEFAULT_OUTPUT);
 
     int b = 7;
     PrintVar(b);
