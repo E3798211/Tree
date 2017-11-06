@@ -63,7 +63,6 @@ public:
     */
     int UnloadData(const char* filename);
 
-    // Unloading data
     // AskForDiff()
     // AddNode()
 
@@ -74,8 +73,9 @@ public:
 
         \param [in] filename        Name of the database.
     */
-    Akinator(const char* filname = nullptr);                        //  Calls Load data. Parameters needed.
+    Akinator(const char* filename = nullptr);
 
+    /// Default destructor
     ~Akinator();
 
     // AddElem()

@@ -200,11 +200,11 @@ int Akinator::UnloadData(const char* filename)
     return OK;
 }
 
-Akinator::Akinator(const char* filname)
+Akinator::Akinator(const char* filename)
 {
     EnterFunction();
 
-    (filname != nullptr)?   LoadData(filname) : LoadData(DEFAULT_INPUT);
+    (filename != nullptr)?   LoadData(filename) : LoadData(DEFAULT_INPUT);
 
     QuitFunction();
 }
@@ -212,6 +212,9 @@ Akinator::Akinator(const char* filname)
 Akinator::~Akinator()
 {
     EnterFunction();
+
+    UnloadData(DEFAULT_OUTPUT);
+
     QuitFunction();
 }
 
