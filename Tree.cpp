@@ -332,8 +332,6 @@ int Tree::DeleteBranch(Node* branch_root, int rec_depth, bool right)
     return OK;
 }
 
-
-
 int Tree::CallGraph()
 {
     FILE* output = fopen(DOT_FILENAME_DEFAULT, "w");
@@ -366,3 +364,4 @@ int Tree::CallGraph()
 
     return system(command);
 }
+

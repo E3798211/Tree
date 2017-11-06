@@ -79,13 +79,14 @@ public:
     */
     bool NodeExists(const Node* branch_root, const Node* check_ptr);
 
-    /// Prints node for DOT
+    /// Prints nodes for DOT
     /**
+        Function provides with go-round of the branch
+
         \param [in] output          FILE to write in
         \param [in] branch_root     Pointer to the root of the branch
+        \param [in] print_type      Pointer to the function that prints nodes
     */
-    //int PrintNode(FILE* output, Node* branch_root);
-
     int PrintBranch(FILE* output, Node* branch_root, int (*print_type)(FILE* output, Node* node_to_print));
 
 public:

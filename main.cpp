@@ -25,6 +25,8 @@ int main()
     new_node = b.GetRoot();
     //b.DeleteBranch(new_node);
 
-    b.CallGraph();
+    //b.CallGraph();
+
+    b.DeleteBranch(b.GetRoot());
 
 }
