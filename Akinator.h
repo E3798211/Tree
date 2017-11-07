@@ -66,14 +66,37 @@ public:
 // =========================    Supporting functions about action
     /// Asks user
     /**
-        Returns true if answer is positive, false otherwise
-
         \param [in] question        String with the question
     */
     bool UserAnswer(const char* question);
 
+    /// Ask about new element
+    /**
+        \param [in] user_answer     Array to place user's answer
+    */
+    int AskAboutNewName(char* user_answer);
+
+    /// Ask about definition of new element
+    /**
+        Returns amount of varriables read from stdin
+
+        \param [in] old_answer      Old answer
+        \param [in] new_answer      New answer
+        \param [in] user_answer     Array to place user's answer
+    */
+    int AskAboutNewDiff(const char* old_answer, const char* new_answer, char* user_answer);
+
+    /// Adds new answer
+    /**
+        \param [in] current_node    Node we want to replace with question
+        \param [in] difference      String with difference between NEW and OLD data
+        \param [in] new_node_data   String with data for new node
+    */
+    int AddNewAnswer(Node* current_node, char* difference, char* new_node_data);
+
     // AskForDiff()
     // AddNode()
+    // AddElem()
 
 public:
     /// Default constructor
@@ -87,11 +110,9 @@ public:
     /// Default destructor
     ~Akinator();
 
+    /// Action
+    int Action();
 
-    // ACT() or GO() or START() etc
-
-
-    // AddElem()
     // Compare
 
 

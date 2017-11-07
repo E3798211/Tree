@@ -51,7 +51,7 @@ char* Akinator::FileRead(FILE* input)
     }
 
     rewind(input);
-    int n_chars = fread(data, 1, file_size, input);
+    fread(data, 1, file_size, input);
     data[file_size] = '\0';
 
     PrintVar(input);
@@ -237,14 +237,73 @@ bool Akinator::UserAnswer(const char* question)
     return choise;
 }
 
+int Akinator::AskAboutNewName(char* user_answer)
+{
+    printf("What have you guessed?\nYour answer: ");
+    getchar();
+    fgets(user_answer, 100, stdin);
+    return OK;
+}
 
+int Akinator::AskAboutNewDiff(const char* old_answer, const char* new_answer, char* user_answer)
+{
+    printf("What is the difference between %s and %s?\nYour answer: ", new_answer, old_answer);
+    fgets(user_answer, 100, stdin);
+    return OK;
+}
+
+int Akinator::AddNewAnswer(Node* current_node, char* difference, char* new_answer)
+{
+    EnterFunction();
+
+    size_t data_len = strlen(current_node->Data);
+
+    char* old_answer = nullptr;
+    try
+    {
+        old_answer = new char [data_len + 1];
+    }
+    catch(const std::bad_alloc& ex)
+    {
+        SetColor(RED);
+        printf("=====   Cannot allocate %d bytes for old_answer   =====\n", data_len + 1);
+        SetColor(DEFAULT);
+
+        PrintVar(current_node->Data);
+
+        QuitFunction();
+        return DATA_NOT_CREATED;
+    }
+
+    strcpy(old_answer, current_node->Data);
+    bool node_is_right = current_node->Is_right;
+    Node* parent = current_node->Parent;
+
+    tree.DeleteBranch(current_node);
+
+    Node* new_root = nullptr;
+    if(node_is_right)       tree.AddRight(parent, &new_root);
+    else                    tree.AddLeft (parent, &new_root);
+
+    tree.SetData(new_root, difference);
+
+    Node* new_root_branch = nullptr;
+    tree.AddRight(new_root, &new_root_branch);
+    tree.SetData(new_root_branch, new_answer);
+
+    tree.AddLeft(new_root, &new_root_branch);
+    tree.SetData(new_root_branch, old_answer);
+
+    QuitFunction();
+    return OK;
+}
 
 
 Akinator::Akinator(const char* filename)
 {
     EnterFunction();
 
-    (filename != nullptr)?   LoadData(filename) : LoadData(DEFAULT_INPUT);
+    LoadData(filename? filename : DEFAULT_INPUT);
 
     QuitFunction();
 }
@@ -258,4 +317,34 @@ Akinator::~Akinator()
     QuitFunction();
 }
 
+int Akinator::Action()
+{
+    EnterFunction();
+
+    printf("Hello! My name is Jonny! I know everything.\nThink about something and let me guess...\n");
+
+    Node* current_node = tree.GetRoot();
+    while(!tree.IsLast(current_node)){
+        if(UserAnswer(current_node->Data))      current_node = current_node->Right;
+        else                                    current_node = current_node->Left;
+    }
+
+    printf("This is %s!\n", current_node->Data);
+    bool user_confirmed = UserAnswer("Am I right");
+
+    if(!user_confirmed){
+
+        // Ask for new ans and diff
+        char new_name[100];
+        AskAboutNewName(new_name);
+        char difference[100];
+        AskAboutNewDiff(current_node->Data, new_name, difference);
+
+        AddNewAnswer(current_node, difference, new_name);
+    }else
+        printf("I've said...\n");
+
+    QuitFunction();
+    return OK;
+}
 

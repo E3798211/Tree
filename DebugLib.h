@@ -69,9 +69,9 @@ void SetColor(const char* color);
 
 #define Execute( statement )                                                    \
     DEBUG{                                                                      \
-        SetColor(MAGENTA);                                                  \
+        SetColor(MAGENTA);                                                      \
         if(IN){                                                                 \
-            std::cout << __func__ << "(): ";                                     \
+            std::cout << __func__ << "(): ";                                    \
             std::cout << std::setw(20);                                         \
         }                                                                       \
         std::cout << "Executing:\t" << #statement << std::endl;                 \
@@ -99,6 +99,9 @@ void SetColor(const char* color);
 
 
     Add Execute( param ): prints debug info and places param in source text
+
+    Initing functions: initializating spec global varriables with info - do we need to print bdg info in a file,
+        stderr, as html, etc
 
 
 */

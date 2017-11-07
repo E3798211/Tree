@@ -243,7 +243,7 @@ bool Tree::IsAlive()
 
 /*AUTO GENERATED*/    AddNode(Right);
 
-int Tree::SetData(Node* change_node, data_t data)
+int Tree::SetData(Node* change_node, const data_t data)
 {
     EnterFunction();
 
@@ -304,6 +304,41 @@ int Tree::SetData(Node* change_node, data_t data)
 
     QuitFunction();
     return OK;
+}
+
+bool Tree::IsLast(const Node* check_node)
+{
+    EnterFunction();
+
+    SAFE {
+
+    // Verificator
+
+    if(!NodeExists(root, check_node)){
+        SetColor(BLUE);
+        USR_INFORM printf("Node does not exist\n");
+        SetColor(DEFAULT);
+
+        QuitFunction();
+        return false;
+    }
+    }
+
+    if (check_node->Left == nullptr && check_node->Right == nullptr){
+        SetColor(GREEN);
+        DEBUG printf("Given pointer is last\n");
+        SetColor(DEFAULT);
+
+        QuitFunction();
+        return true;
+    }else{
+        SetColor(GREEN);
+        DEBUG printf("Given pointer is not last\n");
+        SetColor(DEFAULT);
+
+        QuitFunction();
+        return false;
+    }
 }
 
 int Tree::DeleteBranch(Node* branch_root, int rec_depth, bool right)

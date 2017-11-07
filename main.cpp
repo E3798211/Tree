@@ -37,22 +37,11 @@ int main()
     //a.LoadData("save.txt");
     //a.LoadData("save.txt");
 
-    //a.tree.CallGraph();
+    a.Action();
 
-    //a.UnloadData(DEFAULT_OUTPUT);
+    a.tree.CallGraph();
 
-    PrintVar(a.UserAnswer("qwe"));
-
-    int b = 7;
-    PrintVar(b);
-
-    EnterFunction();
-    //Execute(int a = 0;);
-    QuitFunction();
-
-    Execute(int c = 0);
+    //PrintVar(a.UserAnswer("qwe"));
 
     //PrintVar(a);
-
-
 }

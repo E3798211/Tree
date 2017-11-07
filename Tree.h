@@ -131,13 +131,24 @@ public:
     */
     int SetData(Node* change_node, const data_t data);
 
+    /// Check if node is last or not
+    /**
+        Rerturns true if elem is last, false othewise.
+
+        \warning Returns false even if node is not in the tree.
+
+        \param [in] check_node      Pointer to the node you want to check
+    */
+    bool IsLast(const Node* check_node);
+
     /// Delete branch
     /**
         \param [in] branch_root     Pointer to the root node of the branch we want to delete
         \param [in] dbg_rec_depth   DEBUG VARRIABLE, PLEASE DO NOT USE IT
         \param [in] dbg_right       DEBUG VARRIABLE, PLEASE DO NOT USE IT
 
-        \warning Deletes branch RECURSIVELY! Use only first parameter or you will not see correct debug info
+        \warning Deletes branch RECURSIVELY! Use only first parameter or you will not see correct debug info.
+        Deletes root too.
     */
     int DeleteBranch(Node* branch_root, int dbg_rec_depth = 0, bool dbg_right = true);
 
