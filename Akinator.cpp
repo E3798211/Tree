@@ -337,21 +337,21 @@ int* Akinator::BuildPath(Node* start, Node* destination)
     int* path = nullptr;
     try
     {
-        path = new int [steps];
+        path = new int [steps + 1];
     }
     catch(const std::bad_alloc& ex)
     {
         SetColor(RED);
-        DEBUG printf("=====   Cannot allocate %d int's   =====\n", steps);
+        DEBUG printf("=====   Cannot allocate %d int's   =====\n", steps + 1);
         SetColor(DEFAULT);
 
         QuitFunction();
         return nullptr;
     }
 
-    for(int k = 0; k < steps - 1; k++)
+    for(int k = 0; k < steps; k++)
         path[k] = backtrace_reverse[steps - k - 1];
-    path[steps - 1] = STOP;
+    path[steps] = STOP;
 
     for(int k = 0; k < steps; k++)
         PrintVar(path[k]);
@@ -377,24 +377,27 @@ int Akinator::PrintDiff(const char* ans_1, const char* ans_2, int* path_1, int* 
         if(path_1[i] == STOP)
             break;
 
-        printf("Both of them %s\n", current_node->Data);
+        printf("Both of them ");
+        if(path_1[i] == RIGHT)              printf("             ");
+        else                                printf("do not       ");
 
-        if(path_1[i] == RIGHT)          current_node = current_node->Right;
-        else                            current_node = current_node->Left;
+        printf("%s\n", current_node->Data);
+
+        if(path_1[i] == RIGHT)              current_node = current_node->Right;
+        else                                current_node = current_node->Left;
 
         i++;
     }
-    printf("Both of them %s\n", current_node->Data);
 
     Node* tmp = current_node;
 
-    printf("\nBut %s is different from %s.\n", ans_1, ans_2);
+    printf("\nBut %s is different from %s.\n%s:\n", ans_1, ans_2, ans_1);
 
     int  counter_1 = i;
-    if(path_1[counter_1] == RIGHT)        current_node = current_node->Right;
-    else                                    current_node = current_node->Left;
-
     while(path_1[counter_1] != STOP){
+        if(path_1[i] == RIGHT)              printf("             ");
+        else                                printf("do not       ");
+
         printf("%s\n", current_node->Data);
 
         if(path_1[counter_1] == RIGHT)      current_node = current_node->Right;
@@ -407,10 +410,10 @@ int Akinator::PrintDiff(const char* ans_1, const char* ans_2, int* path_1, int* 
 
     int counter_2 = i;
     current_node = tmp;
-    if(path_2[counter_2] == RIGHT)        current_node = current_node->Right;
-    else                                    current_node = current_node->Left;
-
     while(path_2[counter_2] != STOP){
+        if(path_2[counter_2] == RIGHT)              printf("             ");
+        else                                        printf("do not       ");
+
         printf("%s\n", current_node->Data);
 
         if(path_2[counter_2] == RIGHT)      current_node = current_node->Right;
@@ -455,6 +458,55 @@ int Akinator::CompareAnswers(const char* ans_1, const char* ans_2)
     return OK;
 }
 
+int Akinator::PrintDefinition(const char* ans, int* path)
+{
+    EnterFunction();
+
+    assert(ans != nullptr);
+    assert(path != nullptr);
+
+    printf("%s:\n", ans);
+
+    int i = 0;
+    Node* current_node = tree.GetRoot();
+    while(path[i] != STOP){
+        if(path[i] == RIGHT)            printf("He         ");
+        else                            printf("He doesn't ");
+
+        printf("%s\n", current_node->Data);
+
+        if(path[i] == RIGHT)            current_node = current_node->Right;
+        else                            current_node = current_node->Left;
+
+        i++;
+    }
+
+    QuitFunction();
+    return OK;
+}
+
+int Akinator::CreateDefinition(const char* ans)
+{
+    EnterFunction();
+
+    Node*  node = tree.FindNode(tree.GetRoot(), ans);
+    PrintVar(node);
+
+    SAFE {
+    if(!tree.NodeExists(tree.GetRoot(), node)){
+        SetColor(BLUE);
+        USR_INFORM printf("ans does not exist\n");
+        SetColor(DEFAULT);
+
+        return NODE_DOES_NOT_EXIST;
+    }
+    }
+
+    PrintDefinition(ans, BuildPath(tree.GetRoot(), node));
+
+    QuitFunction();
+    return OK;
+}
 
     Akinator::Akinator(const char* filename)
 {

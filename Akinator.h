@@ -110,6 +110,13 @@ public:
     */
     int PrintDiff(const char* ans_1, const char* ans_2, int* path_1, int* path_2);
 
+    /// Prints definition of an answer
+    /**
+        \param [in] ans             Name we want to be defined
+        \param [in] path            Path to the node
+    */
+    int PrintDefinition(const char* ans, int* path);
+
 public:
     /// Default constructor
     /**
@@ -131,6 +138,13 @@ public:
         \param [in] ans_2           Second answer
     */
     int CompareAnswers(const char* ans_1, const char* ans_2);
+
+
+    /// Creates definition of answer
+    /**
+        \param [in] ans             Answer to be defined
+    */
+    int CreateDefinition(const char* ans);
 
 };
 
