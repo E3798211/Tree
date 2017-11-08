@@ -234,6 +234,47 @@ int Tree::GetNNodes()
     return n_nodes;
 }
 
+Node* Tree::FindNode(Node* branch_root, const char* node_data)
+{
+    EnterFunction();
+
+    SAFE {
+    if(branch_root == nullptr){
+        QuitFunction();
+        return nullptr;
+    }
+    if(branch_root->Data == nullptr){
+        QuitFunction();
+        return nullptr;
+    }
+    }
+
+    if(!strcmp(branch_root->Data, node_data)){
+        QuitFunction();
+        return branch_root;
+    }
+
+    Node* check_node = nullptr;
+    if(branch_root->Left != nullptr)
+        check_node = FindNode(branch_root->Left, node_data);
+
+    // If found
+    if(check_node != nullptr){
+        SetColor(GREEN);
+        DEBUG printf("Element \"%s\" found. p = %p\n", check_node->Data, check_node);
+        SetColor(DEFAULT);
+
+        QuitFunction();
+        return check_node;
+    }
+
+    if(branch_root->Right != nullptr)
+        check_node = FindNode(branch_root->Right, node_data);
+
+    QuitFunction();
+    return check_node;
+}
+
 bool Tree::IsAlive()
 {
     return alive;

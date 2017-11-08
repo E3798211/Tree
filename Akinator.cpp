@@ -121,6 +121,9 @@ int Akinator::AppendNode(char* data, int* place_in_data, Node* app_node)
 
     PrintVar(*place_in_data);
 
+    delete [] node_text;
+    node_text = nullptr;
+
     QuitFunction();
     return OK;
 }
@@ -242,13 +245,19 @@ int Akinator::AskAboutNewName(char* user_answer)
     printf("What have you guessed?\nYour answer: ");
     getchar();
     fgets(user_answer, 100, stdin);
+    // Deleting \n
+    user_answer[strlen(user_answer) - 1] = '\0';
+
     return OK;
 }
 
 int Akinator::AskAboutNewDiff(const char* old_answer, const char* new_answer, char* user_answer)
 {
-    printf("What is the difference between %s and %s?\nYour answer: ", new_answer, old_answer);
+    printf("What is the difference between \"%s\" and \"%s\"?\nYour answer: ", new_answer, old_answer);
     fgets(user_answer, 100, stdin);
+    // Deleting \n
+    user_answer[strlen(user_answer) - 1] = '\0';
+
     return OK;
 }
 
@@ -294,12 +303,160 @@ int Akinator::AddNewAnswer(Node* current_node, char* difference, char* new_answe
     tree.AddLeft(new_root, &new_root_branch);
     tree.SetData(new_root_branch, old_answer);
 
+    delete [] old_answer;
+    old_answer = nullptr;
+
+    QuitFunction();
+    return OK;
+}
+
+int* Akinator::BuildPath(Node* start, Node* destination)
+{
+    EnterFunction();
+
+    int backtrace_reverse[tree.GetNNodes()];
+    for(int i = 0; i < tree.GetNNodes(); i++)
+        backtrace_reverse[i] = STOP;
+
+    Node* current_node = destination;
+    int i = 0;
+    int steps = 0;
+    while(current_node != start){
+        if(current_node->Is_right)      backtrace_reverse[i++] = RIGHT;
+        else                            backtrace_reverse[i++] = LEFT;
+
+        steps++;
+        current_node = current_node->Parent;
+    }
+
+    for(int k = 0; k < tree.GetNNodes(); k++)
+        PrintVar(backtrace_reverse[k]);
+    PrintVar(steps);
+
+    // Reverting
+    int* path = nullptr;
+    try
+    {
+        path = new int [steps];
+    }
+    catch(const std::bad_alloc& ex)
+    {
+        SetColor(RED);
+        DEBUG printf("=====   Cannot allocate %d int's   =====\n", steps);
+        SetColor(DEFAULT);
+
+        QuitFunction();
+        return nullptr;
+    }
+
+    for(int k = 0; k < steps - 1; k++)
+        path[k] = backtrace_reverse[steps - k - 1];
+    path[steps - 1] = STOP;
+
+    for(int k = 0; k < steps; k++)
+        PrintVar(path[k]);
+
+    QuitFunction();
+    return path;
+}
+
+int Akinator::PrintDiff(const char* ans_1, const char* ans_2, int* path_1, int* path_2)
+{
+    EnterFunction();
+
+    assert(ans_1 != nullptr);
+    assert(ans_2 != nullptr);
+    assert(path_1 != nullptr);
+    assert(path_2 != nullptr);
+
+    printf("%s and %s have something in common.\n", ans_1, ans_2);
+
+    int i = 0;
+    Node* current_node = tree.GetRoot();
+    while(path_1[i] == path_2[i]){
+        if(path_1[i] == STOP)
+            break;
+
+        printf("Both of them %s\n", current_node->Data);
+
+        if(path_1[i] == RIGHT)          current_node = current_node->Right;
+        else                            current_node = current_node->Left;
+
+        i++;
+    }
+    printf("Both of them %s\n", current_node->Data);
+
+    Node* tmp = current_node;
+
+    printf("\nBut %s is different from %s.\n", ans_1, ans_2);
+
+    int  counter_1 = i;
+    if(path_1[counter_1] == RIGHT)        current_node = current_node->Right;
+    else                                    current_node = current_node->Left;
+
+    while(path_1[counter_1] != STOP){
+        printf("%s\n", current_node->Data);
+
+        if(path_1[counter_1] == RIGHT)      current_node = current_node->Right;
+        else                                current_node = current_node->Left;
+
+        counter_1++;
+    }
+
+    printf("\nWhile %s:\n", ans_2);
+
+    int counter_2 = i;
+    current_node = tmp;
+    if(path_2[counter_2] == RIGHT)        current_node = current_node->Right;
+    else                                    current_node = current_node->Left;
+
+    while(path_2[counter_2] != STOP){
+        printf("%s\n", current_node->Data);
+
+        if(path_2[counter_2] == RIGHT)      current_node = current_node->Right;
+        else                                current_node = current_node->Left;
+
+        counter_2++;
+    }
+
+    QuitFunction();
+    return OK;
+}
+
+int Akinator::CompareAnswers(const char* ans_1, const char* ans_2)
+{
+    EnterFunction();
+
+    Node*  first_node = tree.FindNode(tree.GetRoot(), ans_1);
+    PrintVar(first_node);
+    Node* second_node = tree.FindNode(tree.GetRoot(), ans_2);
+    PrintVar(second_node);
+
+    SAFE {
+    if(!tree.NodeExists(tree.GetRoot(), first_node)){
+        SetColor(BLUE);
+        USR_INFORM printf("ans_1 does not exist\n");
+        SetColor(DEFAULT);
+
+        return NODE_DOES_NOT_EXIST;
+    }
+    if(!tree.NodeExists(tree.GetRoot(), second_node)){
+        SetColor(BLUE);
+        USR_INFORM printf("ans_2 does not exist\n");
+        SetColor(DEFAULT);
+
+        return NODE_DOES_NOT_EXIST;
+    }
+    }
+
+    PrintDiff(ans_1, ans_2, BuildPath(tree.GetRoot(), first_node), BuildPath(tree.GetRoot(), second_node));
+
     QuitFunction();
     return OK;
 }
 
 
-Akinator::Akinator(const char* filename)
+    Akinator::Akinator(const char* filename)
 {
     EnterFunction();
 
@@ -308,7 +465,7 @@ Akinator::Akinator(const char* filename)
     QuitFunction();
 }
 
-Akinator::~Akinator()
+    Akinator::~Akinator()
 {
     EnterFunction();
 
@@ -333,8 +490,6 @@ int Akinator::Action()
     bool user_confirmed = UserAnswer("Am I right");
 
     if(!user_confirmed){
-
-        // Ask for new ans and diff
         char new_name[100];
         AskAboutNewName(new_name);
         char difference[100];

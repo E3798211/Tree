@@ -94,9 +94,21 @@ public:
     */
     int AddNewAnswer(Node* current_node, char* difference, char* new_node_data);
 
-    // AskForDiff()
-    // AddNode()
-    // AddElem()
+    /// Finds path to element
+    /**
+        \param [in] start           Pointer to the start node
+        \param [in] destination     Pointer to the destination node
+    */
+    int* BuildPath(Node* start, Node* destination);
+
+    /// Prints difference between elements ans_1 and ans_2
+    /**
+        \param [in] ans_1           Name of the first element
+        \param [in] ans_2           Name of the second element
+        \param [in] path_1          Path to the first element
+        \param [in] path_2          Path to the second element
+    */
+    int PrintDiff(const char* ans_1, const char* ans_2, int* path_1, int* path_2);
 
 public:
     /// Default constructor
@@ -113,8 +125,12 @@ public:
     /// Action
     int Action();
 
-    // Compare
-
+    /// Compares two answers
+    /**
+        \param [in] ans_1           First answer
+        \param [in] ans_2           Second answer
+    */
+    int CompareAnswers(const char* ans_1, const char* ans_2);
 
 };
 

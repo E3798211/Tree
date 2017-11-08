@@ -40,6 +40,10 @@
 // =================================================
 typedef char* data_t;
 
+const int  LEFT = 0;
+const int RIGHT = 1;
+const int  STOP = -1;
+
 struct Node {
     /// String with data
     data_t   Data = nullptr;
@@ -69,15 +73,6 @@ private:
     bool alive = true;
 
 // =========================    Supporting functions
-    /// Checks node existence
-    /**
-        Retutns TRUE if node exists
-
-        \param [in] branch_root     Pointer to te first element in branch we check
-        \param [in] node            Pointer we want to check
-    */
-    bool NodeExists(const Node* branch_root, const Node* check_ptr);
-
     /// Prints nodes for DOT
     /**
         Function provides with go-round of the branch
@@ -95,11 +90,28 @@ public:
     /// Destructor
     ~Tree();
 
+    /// Checks node existence
+    /**
+        Retutns TRUE if node exists
+
+        \param [in] branch_root     Pointer to te first element in branch we check
+        \param [in] node            Pointer we want to check
+    */
+    bool NodeExists(const Node* branch_root, const Node* check_ptr);
+
     /// Gets root
     Node* GetRoot();
 
     /// Gets n_nodes
     int GetNNodes();
+
+    /// Finds node
+    /**
+        Returns Pointer to the node if found, nullptr otherwise
+        \param [in] branch_root     Pointer to the root of the branch
+        \param [in] node_data       Data we are looking for
+    */
+    Node* FindNode(Node* branch_root, const char* node_data);
 
     /// Gets status - dead or alive
     bool IsAlive();
