@@ -369,7 +369,13 @@ int Akinator::PrintDiff(const char* ans_1, const char* ans_2, int* path_1, int* 
     assert(path_1 != nullptr);
     assert(path_2 != nullptr);
 
+
+    char cmd[1000] = "\"";
     printf("%s and %s have something in common.\n", ans_1, ans_2);
+    strcat(cmd, ans_1);
+    strcat(cmd, " and ");
+    strcat(cmd, ans_2);
+    strcat(cmd, " have something in common. ");
 
     int i = 0;
     Node* current_node = tree.GetRoot();
@@ -378,10 +384,18 @@ int Akinator::PrintDiff(const char* ans_1, const char* ans_2, int* path_1, int* 
             break;
 
         printf("Both of them ");
-        if(path_1[i] == RIGHT)              printf("             ");
-        else                                printf("do not       ");
+        strcat(cmd, "Both of them ");
+        if(path_1[i] == RIGHT){
+            printf("             ");
+        }
+        else{
+            printf("do not       ");
+            strcat(cmd, "do not ");
+        }
 
         printf("%s\n", current_node->Data);
+        strcat(cmd, current_node->Data);
+        strcat(cmd, ", ");
 
         if(path_1[i] == RIGHT)              current_node = current_node->Right;
         else                                current_node = current_node->Left;
@@ -392,13 +406,27 @@ int Akinator::PrintDiff(const char* ans_1, const char* ans_2, int* path_1, int* 
     Node* tmp = current_node;
 
     printf("\nBut %s is different from %s.\n%s:\n", ans_1, ans_2, ans_1);
+    strcat(cmd, "But ");
+    strcat(cmd, ans_1);
+    strcat(cmd, " is different from ");
+    strcat(cmd, ans_2);
+    strcat(cmd, ". ");
+    strcat(cmd, ans_1);
+    strcat(cmd, " ");
 
     int  counter_1 = i;
     while(path_1[counter_1] != STOP){
-        if(path_1[i] == RIGHT)              printf("             ");
-        else                                printf("do not       ");
+        if(path_1[counter_1] == RIGHT){
+            printf("             ");
+        }
+        else{
+            printf("do not       ");
+            strcat(cmd, "do not ");
+        }
 
         printf("%s\n", current_node->Data);
+        strcat(cmd, current_node->Data);
+        strcat(cmd, ", ");
 
         if(path_1[counter_1] == RIGHT)      current_node = current_node->Right;
         else                                current_node = current_node->Left;
@@ -407,20 +435,37 @@ int Akinator::PrintDiff(const char* ans_1, const char* ans_2, int* path_1, int* 
     }
 
     printf("\nWhile %s:\n", ans_2);
+    strcat(cmd, ". While ");
+    strcat(cmd, ans_2);
 
     int counter_2 = i;
     current_node = tmp;
     while(path_2[counter_2] != STOP){
-        if(path_2[counter_2] == RIGHT)              printf("             ");
-        else                                        printf("do not       ");
+        if(path_2[counter_2] == RIGHT){
+            printf("             ");
+        }
+        else{
+            printf("do not       ");
+            strcat(cmd, "do not ");
+        }
 
         printf("%s\n", current_node->Data);
+        strcat(cmd, current_node->Data);
+        strcat(cmd, ", ");
 
         if(path_2[counter_2] == RIGHT)      current_node = current_node->Right;
         else                                current_node = current_node->Left;
 
         counter_2++;
     }
+
+    strcat(cmd, "\"");
+
+    char espeak[10000] = "espeak ";
+    strcat(espeak, cmd);
+    strcat(espeak, " -ven -s 150");
+
+    system(espeak);
 
     QuitFunction();
     return OK;
@@ -465,21 +510,39 @@ int Akinator::PrintDefinition(const char* ans, int* path)
     assert(ans != nullptr);
     assert(path != nullptr);
 
+    char cmd[1000] = "\"";
+
     printf("%s:\n", ans);
+    strcat(cmd, ans);
 
     int i = 0;
     Node* current_node = tree.GetRoot();
     while(path[i] != STOP){
-        if(path[i] == RIGHT)            printf("He         ");
-        else                            printf("He doesn't ");
+        if(path[i] == RIGHT){
+            printf("He         ");
+            strcat(cmd, " He ");
+        }
+        else{
+            printf("He doesn't ");
+            strcat(cmd, " He doesn't ");
+        }
 
         printf("%s\n", current_node->Data);
+        strcat(cmd, current_node->Data);
 
         if(path[i] == RIGHT)            current_node = current_node->Right;
         else                            current_node = current_node->Left;
 
         i++;
     }
+
+    strcat(cmd, "\"");
+
+    char espeak[10000] = "espeak ";
+    strcat(espeak, cmd);
+    strcat(espeak, " -ven -s 150");
+
+    system(espeak);
 
     QuitFunction();
     return OK;

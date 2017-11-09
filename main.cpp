@@ -8,11 +8,13 @@
 int main()
 {
     Akinator a("outdef.txt");
-    a.Action();
+    //a.Action();
 
     //a.CompareAnswers("QQQQ", "Mooshroom");
     //a.CreateDefinition("WALL-E");
     //a.CreateDefinition("Berezka");
-    a.tree.CallGraph();
+    //a.tree.CallGraph();
+    a.CompareAnswers("Kolobok", "Smesharik");
+    a.CreateDefinition("Smesharik");
 
 }
